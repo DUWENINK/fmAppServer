@@ -205,6 +205,9 @@
     <Compile Include="Models\Apply_Sub_JieKuan.cs">
       <DependentUpon>FamilyModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\apply_temp_sync.cs">
+      <DependentUpon>FamilyModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Bank.cs">
       <DependentUpon>FamilyModel.tt</DependentUpon>
     </Compile>
@@ -241,6 +244,7 @@
     <Compile Include="Models\UserModelPower.cs">
       <DependentUpon>FamilyModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\Apply_temp_sync.cs" />
     <Compile Include="Models\ViewModels\ConfigXml.cs" />
     <Compile Include="Models\ViewModels\SysModelEntity.cs" />
     <Compile Include="Models\ViewModels\UserMenuPower.cs" />
