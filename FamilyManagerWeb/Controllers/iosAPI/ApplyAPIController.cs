@@ -161,7 +161,6 @@ namespace FamilyManagerWeb.Controllers
 
         public JsonResult SyncApplyInfo(string jsonStr)
         {
-            jsonStr = "[{\"ID\":0,\"userID\":13,\"applyDate\":\"2015-07-01\",\"keepType\":\"现金记账\",\"flowTypeID\":1,\"flowTypeName\":\"现金支出\",\"InOutType\":\"out\",\"FeeItemID\":101,\"FeeItemName\":\"早饭\",\"imoney\":10.0,\"InUserBankID\":12,\"OutUserBankID\":22,\"CAdd\":\"无备注\"} ]";
             bool error = false;//标记是否有错误
             LycJsonResult lycResult = new LycJsonResult();
             //1、先将要同步的记账信息写入同步临时表
