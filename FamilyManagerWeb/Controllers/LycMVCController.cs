@@ -60,6 +60,138 @@ namespace FamilyManagerWeb.Controllers
         {
             bool success = true;
             SqlCommand cmd = new SqlCommand();
+            string connStr = System.Web.Configuration.WebConfigurationManager.AppSettings["SqlCONNECTIONSTRING4"];
+            SqlConnection conn = new SqlConnection(connStr);
+            try
+            {
+                conn.Open();
+                cmd.Connection = conn;
+                cmd.Transaction = conn.BeginTransaction();//开启事务
+
+                foreach (var item in list)
+                {
+                    //循环调用存储过程
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    if (item.keepType == "现金记账")
+                    {
+                        #region 配置现金记账的存储过程
+                        cmd.CommandText = "proc_AddCashAccouting";
+
+                        //设置参数
+                        SqlParameter[] sp1 = new SqlParameter[]
+                            {
+                                new SqlParameter{ParameterName = "@applyDate",Value = item.applyDate.ToString("yyyy-MM-dd")},
+                                new SqlParameter{ParameterName = "@flowTypeID",Value = item.flowTypeID},
+                                new SqlParameter{ParameterName = "@flowTypeName",Value = item.flowTypeName},
+                                new SqlParameter{ParameterName = "@InOutType",Value = item.inOutType},
+                                new SqlParameter{ParameterName = "@FeeItemID",Value = item.feeItemID},
+                                new SqlParameter{ParameterName = "@FeeItemName",Value = item.feeItemName},
+                                new SqlParameter{ParameterName = "@iMoney",Value = item.imoney},
+                                new SqlParameter{ParameterName = "@UserID",Value = item.userID},
+                                new SqlParameter{ParameterName = "@BJieKuan",Value = "N"},
+                                new SqlParameter{ParameterName = "@BHuanKuan",Value = "N"},
+                                new SqlParameter{ParameterName = "@CAdd",Value = item.cAdd}
+                            };
+
+                        //将参数添加到cmd对象中
+                        cmd.Parameters.Clear();
+                        foreach (var p in sp1)
+                        {
+                            cmd.Parameters.Add(p);
+                        }
+
+                        #endregion
+                    }
+                    else if (item.keepType == "银行记账")
+                    {
+                        #region 配置银行记账的存储过程
+                        cmd.CommandText = "proc_AddBankAccouting";
+
+                        //设置参数
+                        SqlParameter[] sp2 = new SqlParameter[]
+                            {
+                                new SqlParameter{ParameterName = "@applyDate",Value = item.applyDate.ToString("yyyy-MM-dd")},
+                                new SqlParameter{ParameterName = "@flowTypeID",Value = item.flowTypeID},
+                                new SqlParameter{ParameterName = "@flowTypeName",Value = item.flowTypeName},
+                                new SqlParameter{ParameterName = "@InOutType",Value = item.inOutType},
+                                new SqlParameter{ParameterName = "@FeeItemID",Value = item.feeItemID},
+                                new SqlParameter{ParameterName = "@FeeItemName",Value = item.feeItemName},
+                                new SqlParameter{ParameterName = "@iMoney",Value = item.imoney},
+                                new SqlParameter{ParameterName = "@UserID",Value = item.userID},
+                                new SqlParameter{ParameterName = "@InUserBankID",Value = item.inUserBankID},
+                                new SqlParameter{ParameterName = "@OutUserBankID",Value = item.outUserBankID},
+                                new SqlParameter{ParameterName = "@BJieKuan",Value = "N"},
+                                new SqlParameter{ParameterName = "@BHuanKuan",Value = "N"},
+                                new SqlParameter{ParameterName = "@CAdd",Value = item.cAdd}
+                            };
+
+                        //将参数添加到cmd对象中
+                        cmd.Parameters.Clear();
+                        foreach (var p in sp2)
+                        {
+                            cmd.Parameters.Add(p);
+                        }
+
+                        #endregion
+                    }
+                    else if (item.keepType == "内部转账")
+                    {
+                        #region 配置内部转账的存储过程
+                        cmd.CommandText = "proc_CashChange";
+
+                        //设置参数
+                        SqlParameter[] sp3 = new SqlParameter[]
+                            {
+                                new SqlParameter{ParameterName = "@applyDate",Value = item.applyDate.ToString("yyyy-MM-dd")},
+                                new SqlParameter{ParameterName = "@flowTypeID",Value = item.flowTypeID},
+                                new SqlParameter{ParameterName = "@flowTypeName",Value = item.flowTypeName},
+                                new SqlParameter{ParameterName = "@InOutType",Value = item.inOutType},
+                                new SqlParameter{ParameterName = "@iMoney",Value = item.imoney},
+                                new SqlParameter{ParameterName = "@UserID",Value = item.userID},
+                                new SqlParameter{ParameterName = "@InUserBankID",Value = item.inUserBankID},
+                                new SqlParameter{ParameterName = "@OutUserBankID",Value = item.outUserBankID},
+                                new SqlParameter{ParameterName = "@CAdd",Value = item.cAdd}
+                            };
+
+                        //将参数添加到cmd对象中
+                        cmd.Parameters.Clear();
+                        foreach (var p in sp3)
+                        {
+                            cmd.Parameters.Add(p);
+                        }
+
+                        #endregion
+                    }
+                    else
+                    {
+                        cmd.Parameters.Clear();
+                        cmd.CommandText = "";
+                        continue;
+                    }
+                    //执行存储过程
+                    cmd.ExecuteNonQuery();
+                }
+                cmd.Transaction.Commit();//提交事务
+
+            }
+            catch
+            {
+                cmd.Transaction.Rollback();
+                success = false;
+            }
+            finally
+            {
+                cmd.Dispose();
+                conn.Close();
+            }
+
+            return success;
+        }
+
+        protected bool SyncApplyNOTransaction(List<Apply_temp_sync_VM> list)
+        {
+            bool success = true;
+            SqlCommand cmd = new SqlCommand();
             SqlConnection conn;
             try
             {
@@ -68,121 +200,105 @@ namespace FamilyManagerWeb.Controllers
                 {
                     conn.Open();
                     cmd.Connection = conn;
-                    cmd.Transaction = conn.BeginTransaction();//开启事务
-
+                    //配置cmd参数
+                    cmd.CommandType = CommandType.StoredProcedure;
                     foreach (var item in list)
                     {
-                        //循环调用存储过程
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        switch (item.flowTypeName)
+                        if (item.keepType == "现金记账")
                         {
                             #region 配置现金记账的存储过程
-                            case "现金记账":
-                                cmd.CommandText = "proc_AddCashAccouting";
-
-                                //设置参数
-                                SqlParameter[] sp1 = new SqlParameter[]
-                                {
-                                    new SqlParameter{ParameterName = "@applyDate",Value = item.applyDate},
-                                    new SqlParameter{ParameterName = "@flowTypeID",Value = item.flowTypeID},
-                                    new SqlParameter{ParameterName = "@flowTypeName",Value = item.flowTypeName},
-                                    new SqlParameter{ParameterName = "@InOutType",Value = item.inOutType},
-                                    new SqlParameter{ParameterName = "@FeeItemID",Value = item.feeItemID},
-                                    new SqlParameter{ParameterName = "@FeeItemName",Value = item.feeItemName},
-                                    new SqlParameter{ParameterName = "@iMoney",Value = item.imoney},
-                                    new SqlParameter{ParameterName = "@UserID",Value = item.userID},
-                                    new SqlParameter{ParameterName = "@BJieKuan",Value = "N"},
-                                    new SqlParameter{ParameterName = "@BHuanKuan",Value = "N"},
-                                    new SqlParameter{ParameterName = "@CAdd",Value = item.cAdd}
-                                };
-
-                                //将参数添加到cmd对象中
-                                cmd.Parameters.Clear();
-                                foreach (var p in sp1)
-                                {
-                                    cmd.Parameters.Add(p);
-                                }
-                                break;
+                            cmd.CommandText = "proc_AddCashAccouting";
+                            //设置参数
+                            SqlParameter[] sp1 = new SqlParameter[]
+                            {
+                                new SqlParameter{ParameterName = "@applyDate",Value = item.applyDate},
+                                new SqlParameter{ParameterName = "@flowTypeID",Value = item.flowTypeID},
+                                new SqlParameter{ParameterName = "@flowTypeName",Value = item.flowTypeName},
+                                new SqlParameter{ParameterName = "@InOutType",Value = item.inOutType},
+                                new SqlParameter{ParameterName = "@FeeItemID",Value = item.feeItemID},
+                                new SqlParameter{ParameterName = "@FeeItemName",Value = item.feeItemName},
+                                new SqlParameter{ParameterName = "@iMoney",Value = item.imoney},
+                                new SqlParameter{ParameterName = "@UserID",Value = item.userID},
+                                new SqlParameter{ParameterName = "@BJieKuan",Value = "N"},
+                                new SqlParameter{ParameterName = "@BHuanKuan",Value = "N"},
+                                new SqlParameter{ParameterName = "@CAdd",Value = item.cAdd}
+                            };
+                            //将参数添加到cmd对象中
+                            cmd.Parameters.Clear();
+                            foreach (var p in sp1)
+                            {
+                                cmd.Parameters.Add(p);
+                            }
                             #endregion
-
-                            #region 配置银行记账的存储过程
-                            case "银行记账":
-                                cmd.CommandText = "proc_AddBankAccoutingg";
-
-                                //设置参数
-                                SqlParameter[] sp2 = new SqlParameter[]
-                                {
-                                    new SqlParameter{ParameterName = "@applyDate",Value = item.applyDate},
-                                    new SqlParameter{ParameterName = "@flowTypeID",Value = item.flowTypeID},
-                                    new SqlParameter{ParameterName = "@flowTypeName",Value = item.flowTypeName},
-                                    new SqlParameter{ParameterName = "@InOutType",Value = item.inOutType},
-                                    new SqlParameter{ParameterName = "@FeeItemID",Value = item.feeItemID},
-                                    new SqlParameter{ParameterName = "@FeeItemName",Value = item.feeItemName},
-                                    new SqlParameter{ParameterName = "@iMoney",Value = item.imoney},
-                                    new SqlParameter{ParameterName = "@UserID",Value = item.userID},
-                                    new SqlParameter{ParameterName = "@InUserBankID",Value = item.inUserBankID},
-                                    new SqlParameter{ParameterName = "@OutUserBankID",Value = item.outUserBankID},
-                                    new SqlParameter{ParameterName = "@BJieKuan",Value = "N"},
-                                    new SqlParameter{ParameterName = "@BHuanKuan",Value = "N"},
-                                    new SqlParameter{ParameterName = "@CAdd",Value = item.cAdd}
-                                };
-
-                                //将参数添加到cmd对象中
-                                cmd.Parameters.Clear();
-                                foreach (var p in sp2)
-                                {
-                                    cmd.Parameters.Add(p);
-                                }
-                                break;
-                            #endregion
-
-                            #region 配置内部转账的存储过程
-                            case "内部转账":
-                                cmd.CommandText = "proc_CashChange";
-
-                                //设置参数
-                                SqlParameter[] sp3 = new SqlParameter[]
-                                {
-                                    new SqlParameter{ParameterName = "@applyDate",Value = item.applyDate},
-                                    new SqlParameter{ParameterName = "@flowTypeID",Value = item.flowTypeID},
-                                    new SqlParameter{ParameterName = "@flowTypeName",Value = item.flowTypeName},
-                                    new SqlParameter{ParameterName = "@InOutType",Value = item.inOutType},
-                                    new SqlParameter{ParameterName = "@iMoney",Value = item.imoney},
-                                    new SqlParameter{ParameterName = "@UserID",Value = item.userID},
-                                    new SqlParameter{ParameterName = "@InUserBankID",Value = item.inUserBankID},
-                                    new SqlParameter{ParameterName = "@OutUserBankID",Value = item.outUserBankID},
-                                    new SqlParameter{ParameterName = "@CAdd",Value = item.cAdd}
-                                };
-
-                                //将参数添加到cmd对象中
-                                cmd.Parameters.Clear();
-                                foreach (var p in sp3)
-                                {
-                                    cmd.Parameters.Add(p);
-                                }
-                                break;
-                            #endregion
-                            default:
-                                cmd.Parameters.Clear();
-                                cmd.CommandText = "";
-                                break;
                         }
-                        if (cmd.CommandText == "")
+                        else if (item.keepType == "银行记账")
                         {
-                            continue;//如果资金类型不对，跳过这笔记账信息
+                            #region 配置银行记账的存储过程
+                            cmd.CommandText = "proc_AddBankAccouting";
+                            //设置参数
+                            SqlParameter[] sp2 = new SqlParameter[]
+                            {
+                                new SqlParameter{ParameterName = "@applyDate",Value = item.applyDate},
+                                new SqlParameter{ParameterName = "@flowTypeID",Value = item.flowTypeID},
+                                new SqlParameter{ParameterName = "@flowTypeName",Value = item.flowTypeName},
+                                new SqlParameter{ParameterName = "@InOutType",Value = item.inOutType},
+                                new SqlParameter{ParameterName = "@FeeItemID",Value = item.feeItemID},
+                                new SqlParameter{ParameterName = "@FeeItemName",Value = item.feeItemName},
+                                new SqlParameter{ParameterName = "@iMoney",Value = item.imoney},
+                                new SqlParameter{ParameterName = "@UserID",Value = item.userID},
+                                new SqlParameter{ParameterName = "@InUserBankID",Value = item.inUserBankID},
+                                new SqlParameter{ParameterName = "@OutUserBankID",Value = item.outUserBankID},
+                                new SqlParameter{ParameterName = "@BJieKuan",Value = "N"},
+                                new SqlParameter{ParameterName = "@BHuanKuan",Value = "N"},
+                                new SqlParameter{ParameterName = "@CAdd",Value = item.cAdd}
+                            };
+                            //将参数添加到cmd对象中
+                            cmd.Parameters.Clear();
+                            foreach (var p in sp2)
+                            {
+                                cmd.Parameters.Add(p);
+                            }
+                            #endregion
                         }
-
+                        else if (item.keepType == "内部转账")
+                        {
+                            #region 配置内部转账的存储过程
+                            cmd.CommandText = "proc_CashChange";
+                            //设置参数
+                            SqlParameter[] sp3 = new SqlParameter[]
+                            {
+                                new SqlParameter{ParameterName = "@applyDate",Value = item.applyDate},
+                                new SqlParameter{ParameterName = "@flowTypeID",Value = item.flowTypeID},
+                                new SqlParameter{ParameterName = "@flowTypeName",Value = item.flowTypeName},
+                                new SqlParameter{ParameterName = "@InOutType",Value = item.inOutType},
+                                new SqlParameter{ParameterName = "@iMoney",Value = item.imoney},
+                                new SqlParameter{ParameterName = "@UserID",Value = item.userID},
+                                new SqlParameter{ParameterName = "@InUserBankID",Value = item.inUserBankID},
+                                new SqlParameter{ParameterName = "@OutUserBankID",Value = item.outUserBankID},
+                                new SqlParameter{ParameterName = "@CAdd",Value = item.cAdd}
+                            };
+                            //将参数添加到cmd对象中
+                            cmd.Parameters.Clear();
+                            foreach (var p in sp3)
+                            {
+                                cmd.Parameters.Add(p);
+                            }
+                            #endregion
+                        }
+                        else
+                        {
+                            cmd.Parameters.Clear();
+                            cmd.CommandText = "";
+                            continue;
+                        }
                         //执行存储过程
                         cmd.ExecuteNonQuery();
                     }
-
-                    cmd.Transaction.Commit();//提交事务
-                    cmd.Dispose();
                 }
             }
             catch
             {
-                cmd.Transaction.Rollback();
+                cmd.Dispose();
                 success = false;
             }
 

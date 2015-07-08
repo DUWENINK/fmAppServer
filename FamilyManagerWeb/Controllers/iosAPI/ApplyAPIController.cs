@@ -231,7 +231,8 @@ namespace FamilyManagerWeb.Controllers
             {
                 List<Apply_temp_sync_VM> lvm = new List<Apply_temp_sync_VM>();
                 lvm = JsonConvert.DeserializeObject<List<Apply_temp_sync_VM>>(jsonStr);
-
+                
+                
                 //转换完成后执行存储过程
                 bool success = this.SyncApplyWithProcAndTransaction(lvm);
                 if (success)
