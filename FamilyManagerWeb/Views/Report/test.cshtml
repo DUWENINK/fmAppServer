@@ -8,18 +8,18 @@
 
     Layout = null;
 }
-<div id="chartHolder" style="width: 650px;height: 450px"></div>
+<div id="chartHolder" style="width: 750px;height: 550px"></div>
 
 <script type="text/javascript">
     /* Title settings */
     title = "月度支出分析（饼图）";
-    titleXpos = 390;
+    titleXpos = 600;
     titleYpos = 85;
 
     /* Pie Data */
-    pieRadius = 130;
-    pieXpos = 180;
-    pieYpos = 200;
+    pieRadius = 200;
+    pieXpos = 300;
+    pieYpos = 260;
     pieData = [
     @{
         //List<FeeItem> feeList = WebComm.GetFeeItemList().Where(l => l.FeeItemClassID == 0).OrderBy(l=>l.FeeItemID).ToList();
@@ -28,23 +28,23 @@
         sql.Append("select sum(imoney) as imoney,feeitemid,feeitemname from apply_sub  ");
         sql.Append("where feeitemid > 0 ");
         sql.Append("group by feeitemid,feeitemname) a ");
-        sql.Append("order by a.feeitemid ");
+        sql.Append(" where imoney > 1000 ");
+        sql.Append("order by a.imoney desc ");
         DataTable dt = LycSQLHelper.GetDataTable(sql.ToString());
-        foreach (DataRow item in dt.Rows)
+        for (int i = 0; i < dt.Rows.Count - 1; i++ )
         {
-            <text>@(item["imoney"].ToString()),</text>
+            <text>@(dt.Rows[i]["imoney"].ToString()),</text>
         }
+        <text>@(dt.Rows[dt.Rows.Count-1]["imoney"].ToString())</text>
     }        
-    1
     ];
-    pieLegend = [
-    @{
-        foreach (DataRow item in dt.Rows)
-        {
-            <text>"%%.%% – @(item["feeitemname"].ToString())",</text>
-        }
+    pieLegend = [    
+    @for (int i = 0; i < dt.Rows.Count - 1; i++)
+    {
+        <text>"%%.%% – @(dt.Rows[i]["feeitemname"].ToString())",</text>
     }
-    "其他"
+    "%%.%% - @(dt.Rows[dt.Rows.Count - 1]["feeitemname"].ToString())"
+    
     ];
 
     pieLegendPos = "east";
