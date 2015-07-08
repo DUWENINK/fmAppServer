@@ -167,6 +167,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\iosAPI\ApplyAPIController.cs" />
     <Compile Include="Controllers\iosAPI\ApplyQueryAPIController.cs" />
     <Compile Include="Controllers\iosAPI\BaseDataAPIController.cs" />
@@ -175,6 +176,7 @@
     <Compile Include="Controllers\InOutManage\ApplyController.cs" />
     <Compile Include="Controllers\InOutManage\ApplySubController.cs" />
     <Compile Include="Controllers\iosAPI\UserInfoAPIController.cs" />
+    <Compile Include="Controllers\LycMVCController.cs" />
     <Compile Include="Controllers\MainManage\BankController.cs" />
     <Compile Include="Controllers\MainManage\CommViewController.cs" />
     <Compile Include="Controllers\MainManage\HomeController.cs" />
@@ -203,6 +205,9 @@
       <DependentUpon>FamilyModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Apply_Sub_JieKuan.cs">
+      <DependentUpon>FamilyModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\apply_temp_sync.cs">
       <DependentUpon>FamilyModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Bank.cs">
@@ -241,6 +246,7 @@
     <Compile Include="Models\UserModelPower.cs">
       <DependentUpon>FamilyModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\Apply_temp_sync.cs" />
     <Compile Include="Models\ViewModels\ConfigXml.cs" />
     <Compile Include="Models\ViewModels\SysModelEntity.cs" />
     <Compile Include="Models\ViewModels\UserMenuPower.cs" />

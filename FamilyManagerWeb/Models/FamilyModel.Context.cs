@@ -36,5 +36,6 @@ namespace FamilyManagerWeb.Models
         public DbSet<UserBank> UserBanks { get; set; }
         public DbSet<UserModelPower> UserModelPowers { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<apply_temp_sync> apply_temp_sync { get; set; }
     }
 }
