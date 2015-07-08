@@ -13,7 +13,7 @@ using System.Data.SqlClient;
 
 namespace FamilyManagerWeb.Controllers
 {
-    public class ApplyQueryAPIController : Controller
+    public class ApplyQueryAPIController : LycMVCController
     {
         public FamilyCaiWuDBEntities FDB { get; private set; }
         //
@@ -193,53 +193,18 @@ namespace FamilyManagerWeb.Controllers
                 SqlParameter[] sp = new SqlParameter[]{
                     new SqlParameter("@userID",userID)
                 };
-                DataTable dt = this.ExecStoredProcedure("QueryUserFullMoney", sp);
+                DataTable dt = this.QueryStoredProcedure("QueryUserFullMoney", sp);
                 DataRow row = dt.Rows[0];
                 var _jsonObj = new { cashMoney = row["inowcashmoney"].ToString(), bankMoney = row["bankMoney"].ToString(), totalMoney = row["totalMoney"].ToString() };
 
-                result.Data = new JsonResultModel { bSuccess = true, message = "获取资产信息成功", jsonObj = _jsonObj };               
+                result.Data = new JsonResultModel { bSuccess = true, message = "获取资产信息成功", jsonObj = _jsonObj };
             }
             catch (Exception ex)
             {
                 result.Data = new JsonResultModel { bSuccess = false, message = "系统异常," + ex.Message, jsonObj = new object { } };
             }
             return result;
-        }
-
-        private DataTable ExecStoredProcedure(string procedureName, params SqlParameter[] par)
-        {
-            DataTable dt = new DataTable();
-            try
-            {
-                string connStr = System.Web.Configuration.WebConfigurationManager.AppSettings["SqlCONNECTIONSTRING4"];
-                SqlConnection conn;
-                using (conn = new SqlConnection(connStr))
-                {
-                    conn.Open();
-                    SqlCommand cmd = new SqlCommand();
-                    cmd.Parameters.Clear();
-                    cmd.Connection = conn;
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "QueryUserFullMoney";
-                    foreach (var item in par)
-                    {
-                        cmd.Parameters.Add(item);
-                    }
-                    
-                    SqlDataAdapter adp = new SqlDataAdapter(cmd);
-                    DataSet ds = new DataSet();
-                    adp.Fill(ds, "default");
-                    dt = ds.Tables["default"];
-                    cmd.Dispose();
-                }
-            }
-            catch
-            {
-                throw new Exception("获取数据时错误！");
-            }
-            return dt;
-        }
-    
+        }    
     }
 
 

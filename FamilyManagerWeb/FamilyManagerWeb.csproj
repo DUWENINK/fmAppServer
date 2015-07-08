@@ -167,6 +167,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\iosAPI\ApplyAPIController.cs" />
     <Compile Include="Controllers\iosAPI\ApplyQueryAPIController.cs" />
     <Compile Include="Controllers\iosAPI\BaseDataAPIController.cs" />
@@ -175,6 +176,7 @@
     <Compile Include="Controllers\InOutManage\ApplyController.cs" />
     <Compile Include="Controllers\InOutManage\ApplySubController.cs" />
     <Compile Include="Controllers\iosAPI\UserInfoAPIController.cs" />
+    <Compile Include="Controllers\LycMVCController.cs" />
     <Compile Include="Controllers\MainManage\BankController.cs" />
     <Compile Include="Controllers\MainManage\CommViewController.cs" />
     <Compile Include="Controllers\MainManage\HomeController.cs" />

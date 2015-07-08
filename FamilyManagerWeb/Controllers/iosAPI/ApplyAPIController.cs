@@ -10,10 +10,11 @@ using System.Web.Mvc;
 using System.Threading;
 using FamilyManagerWeb.Models.ViewModels;
 using Newtonsoft.Json;
+using System.Data.SqlClient;
 
 namespace FamilyManagerWeb.Controllers
 {
-    public class ApplyAPIController : Controller
+    public class ApplyAPIController : LycMVCController
     {
         FamilyCaiWuDBEntities db = new FamilyCaiWuDBEntities();
 
@@ -40,7 +41,7 @@ namespace FamilyManagerWeb.Controllers
             sb.AppendLine(" > Apply_temp_sync_VM:<br/>").AppendLine(JsonConvert.SerializeObject(ats)).Append(" <br/>");
             return Content(sb.ToString());
         }
-
+        //现金记账API
         public string DoCashAccounting(int userID, string ApplyDate, int FlowTypeID, string feeItemID, string feeItemName, string money, string cAdd)
         {
             string result = "{}";
@@ -63,11 +64,31 @@ namespace FamilyManagerWeb.Controllers
 
                 string isJieKuan = flowTypeName.Contains("借") == true ? "Y" : "N";
 
-                //获取备注信息               
-
-                string sql = "exec proc_AddCashAccouting '" + applyDate + "'," + flowTypeID + ",'" + flowTypeName + "','" + InOutType + "'," + feeItemID + ",'" + feeItemName + "'," + iMoney + "," + userID.ToString() + ",'" + isJieKuan + "','N','" + cAdd + "'";
-                LycSQLHelper.ExecuteCommand(CommandType.Text, sql);
-                result = WebComm.ReturnJsonForExterior(true, "现金记账成功！", "{}");
+                //参数设置               
+                SqlParameter[] sp1 = new SqlParameter[]
+                                {
+                                    new SqlParameter{ParameterName = "@applyDate",Value = applyDate},
+                                    new SqlParameter{ParameterName = "@flowTypeID",Value = flowTypeID},
+                                    new SqlParameter{ParameterName = "@flowTypeName",Value = flowTypeName},
+                                    new SqlParameter{ParameterName = "@InOutType",Value = InOutType},
+                                    new SqlParameter{ParameterName = "@FeeItemID",Value = feeItemID},
+                                    new SqlParameter{ParameterName = "@FeeItemName",Value = feeItemName},
+                                    new SqlParameter{ParameterName = "@iMoney",Value = iMoney},
+                                    new SqlParameter{ParameterName = "@UserID",Value = userID},
+                                    new SqlParameter{ParameterName = "@BJieKuan",Value = isJieKuan},
+                                    new SqlParameter{ParameterName = "@BHuanKuan",Value = "N"},
+                                    new SqlParameter{ParameterName = "@CAdd",Value = cAdd}
+                                };
+                //执行存储过程
+                bool success = this.ExecStoredProcedure("proc_AddCashAccouting", sp1);
+                if (success == true)
+                {
+                    result = WebComm.ReturnJsonForExterior(true, "现金记账成功！", "{}");
+                }
+                else
+                {
+                    result = WebComm.ReturnJsonForExterior(false, "现金记账失败！", "{}");
+                }
             }
             catch (Exception ex)
             {
@@ -76,6 +97,7 @@ namespace FamilyManagerWeb.Controllers
             return result;
         }
 
+        //银行记账API
         public string DoBankAccounting(int userID, string ApplyDate, int FlowTypeID,
             string feeItemID, string feeItemName, string money,
             string inUBID, string outUBID, string cAdd)
@@ -105,11 +127,33 @@ namespace FamilyManagerWeb.Controllers
                 //获取出账银行信息
                 string outUserBankID = outUBID;
 
-                //获取备注信息               
-
-                string sql = "exec proc_AddBankAccouting '" + applyDate + "'," + flowTypeID + ",'" + flowTypeName + "','" + InOutType + "'," + feeItemID + ",'" + feeItemName + "'," + iMoney + "," + userID.ToString() + "," + inUserBankID + "," + outUserBankID + ",'" + isJieKuan + "','N','" + cAdd + "'";
-                LycSQLHelper.ExecuteCommand(CommandType.Text, sql);
-                result = WebComm.ReturnJsonForExterior(true, "银行记账成功！", "{}");
+                //参数设置               
+                SqlParameter[] sp2 = new SqlParameter[]
+                {
+                    new SqlParameter{ParameterName = "@applyDate",Value = applyDate},
+                    new SqlParameter{ParameterName = "@flowTypeID",Value = flowTypeID},
+                    new SqlParameter{ParameterName = "@flowTypeName",Value = flowTypeName},
+                    new SqlParameter{ParameterName = "@InOutType",Value = InOutType},
+                    new SqlParameter{ParameterName = "@FeeItemID",Value = feeItemID},
+                    new SqlParameter{ParameterName = "@FeeItemName",Value = feeItemName},
+                    new SqlParameter{ParameterName = "@iMoney",Value = iMoney},
+                    new SqlParameter{ParameterName = "@UserID",Value = userID},
+                    new SqlParameter{ParameterName = "@InUserBankID",Value = inUserBankID},
+                    new SqlParameter{ParameterName = "@OutUserBankID",Value = outUserBankID},
+                    new SqlParameter{ParameterName = "@BJieKuan",Value = isJieKuan},
+                    new SqlParameter{ParameterName = "@BHuanKuan",Value = "N"},
+                    new SqlParameter{ParameterName = "@CAdd",Value = cAdd}
+                };
+                //执行存储过程
+                bool success = this.ExecStoredProcedure("proc_AddBankAccouting", sp2);
+                if (success)
+                {
+                    result = WebComm.ReturnJsonForExterior(true, "银行记账成功！", "{}");
+                }
+                else
+                {
+                    result = WebComm.ReturnJsonForExterior(true, "银行记账失败！", "{}");
+                }
             }
             catch (Exception ex)
             {
@@ -118,6 +162,7 @@ namespace FamilyManagerWeb.Controllers
             return result;
         }
 
+        //内部转账API
         public string DoZhuanZhang(int userID, string ApplyDate, int FlowTypeID,
             string feeItemID, string feeItemName, string money,
             string inUBID, string outUBID, string cAdd)
@@ -146,11 +191,29 @@ namespace FamilyManagerWeb.Controllers
                 //获取出账银行信息
                 string outUserBankID = outUBID;
 
-                //获取备注信息               
-
-                string sql = "exec proc_CashChange '" + applyDate + "'," + flowTypeID + ",'" + flowTypeName + "','" + InOutType + "'," + iMoney + "," + userID.ToString() + "," + inUserBankID + "," + outUserBankID + ",'" + cAdd + "'";
-                LycSQLHelper.ExecuteCommand(CommandType.Text, sql);
-                result = WebComm.ReturnJsonForExterior(true, "转账记账成功！", "{}");
+                //参数设置               
+                SqlParameter[] sp3 = new SqlParameter[]
+                {
+                    new SqlParameter{ParameterName = "@applyDate",Value = applyDate},
+                    new SqlParameter{ParameterName = "@flowTypeID",Value = flowTypeID},
+                    new SqlParameter{ParameterName = "@flowTypeName",Value = flowTypeName},
+                    new SqlParameter{ParameterName = "@InOutType",Value = InOutType},
+                    new SqlParameter{ParameterName = "@iMoney",Value = iMoney},
+                    new SqlParameter{ParameterName = "@UserID",Value = userID},
+                    new SqlParameter{ParameterName = "@InUserBankID",Value = inUserBankID},
+                    new SqlParameter{ParameterName = "@OutUserBankID",Value = outUserBankID},
+                    new SqlParameter{ParameterName = "@CAdd",Value = cAdd}
+                };
+                //执行存储过程
+                bool success = this.ExecStoredProcedure("proc_CashChange", sp3);
+                if (success)
+                {
+                    result = WebComm.ReturnJsonForExterior(true, "转账记账成功！", "{}");
+                }
+                else
+                {
+                    result = WebComm.ReturnJsonForExterior(true, "转账记账失败！", "{}");
+                }
             }
             catch (Exception ex)
             {
@@ -159,59 +222,32 @@ namespace FamilyManagerWeb.Controllers
             return result;
         }
 
+        //同步记账信息API
         public JsonResult SyncApplyInfo(string jsonStr)
         {
-            bool error = false;//标记是否有错误
             LycJsonResult lycResult = new LycJsonResult();
             //1、先将要同步的记账信息写入同步临时表
             try
             {
                 List<Apply_temp_sync_VM> lvm = new List<Apply_temp_sync_VM>();
                 lvm = JsonConvert.DeserializeObject<List<Apply_temp_sync_VM>>(jsonStr);
-                DateTime nowDate = DateTime.Now;
-                string applyGuid = Guid.NewGuid().ToString();
-    
-                List<apply_temp_sync> atsList = new List<apply_temp_sync>();
-                foreach (var item in lvm)
+
+                //转换完成后执行存储过程
+                bool success = this.SyncApplyWithProcAndTransaction(lvm);
+                if (success)
                 {
-                    apply_temp_sync ats = new apply_temp_sync();
-                    ats.applyDate = item.applyDate;
-                    ats.userID = item.userID;
-                    ats.keepType = item.keepType;
-                    ats.flowTypeID = item.flowTypeID;
-                    ats.flowTypeName = item.flowTypeName;
-                    ats.InOutType = item.inOutType;
-                    ats.FeeItemID = item.feeItemID;
-                    ats.FeeItemName = item.feeItemName;
-                    ats.imoney = item.imoney;
-                    ats.InUserBankID = item.inUserBankID;
-                    ats.OutUserBankID = item.outUserBankID;
-                    ats.CAdd = item.cAdd;
-                    ats.applyGUID = applyGuid;
-                    ats.applyGUIDDate = nowDate;
-                    db.apply_temp_sync.Add(ats);
+                    lycResult.Data = new JsonResultModel { bSuccess = true, message = "同步成功！", jsonObj = null };
                 }
-                db.SaveChanges();
+                else
+                {
+                    lycResult.Data = new JsonResultModel { bSuccess = false, message = "同步失败！", jsonObj = null };
+                }
+                
             }
             catch (Exception ex)
             {
-                error = true;
                 lycResult.Data = new JsonResultModel { bSuccess = false, message = "写入同步表失败：" + ex.Message, jsonObj = null };
             }
-            if (error == false)//如果第1步没有错误
-            {
-                //2、循环同步临时表，执行存储过程
-                try
-                {
-
-                }
-                catch (Exception ex)
-                {
-                    lycResult.Data = new JsonResultModel { bSuccess = false, message = "同步写入记账信息失败：" + ex.Message, jsonObj = null };
-                }
-            }
-            
-            lycResult.Data = new JsonResultModel { bSuccess = true, message = "同步成功!", jsonObj = null };
             return lycResult;
         }
 
@@ -220,5 +256,34 @@ namespace FamilyManagerWeb.Controllers
             base.Dispose(disposing);
             db.Dispose();
         }
+
+
+
+        /*
+        DateTime nowDate = DateTime.Now;
+        string applyGuid = Guid.NewGuid().ToString();
+    
+        List<apply_temp_sync> atsList = new List<apply_temp_sync>();
+        foreach (var item in lvm)
+        {
+            apply_temp_sync ats = new apply_temp_sync();
+            ats.applyDate = item.applyDate;
+            ats.userID = item.userID;
+            ats.keepType = item.keepType;
+            ats.flowTypeID = item.flowTypeID;
+            ats.flowTypeName = item.flowTypeName;
+            ats.InOutType = item.inOutType;
+            ats.FeeItemID = item.feeItemID;
+            ats.FeeItemName = item.feeItemName;
+            ats.imoney = item.imoney;
+            ats.InUserBankID = item.inUserBankID;
+            ats.OutUserBankID = item.outUserBankID;
+            ats.CAdd = item.cAdd;
+            ats.applyGUID = applyGuid;
+            ats.applyGUIDDate = nowDate;
+            db.apply_temp_sync.Add(ats);
+        }
+        db.SaveChanges();
+            * */
     }
 }

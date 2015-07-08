@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FamilyManagerWeb.Models.ViewModels
 {
-    class Apply_temp_sync_VM
+    public class Apply_temp_sync_VM
     {
         public int ID { get; set; }
         public int userID { get; set; }

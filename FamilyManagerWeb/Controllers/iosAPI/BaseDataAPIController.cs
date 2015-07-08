@@ -10,7 +10,7 @@ using System.Text;
 
 namespace FamilyManagerWeb.Controllers
 {
-    public class BaseDataAPIController : Controller
+    public class BaseDataAPIController : LycMVCController
     {
         FamilyCaiWuDBEntities db = new FamilyCaiWuDBEntities();
 
