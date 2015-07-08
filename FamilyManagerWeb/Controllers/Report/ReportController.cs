@@ -18,6 +18,10 @@ namespace FamilyManagerWeb.Controllers
             return View();
         }
 
+        public ActionResult TestEasyUI()
+        {
+            return View();
+        }
         
 
         protected override void Dispose(bool disposing)
