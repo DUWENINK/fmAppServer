@@ -5,13 +5,16 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using FamilyManagerWeb.Models;
 using System.Collections;
+
+using Newtonsoft.Json;
+using FamilyManagerWeb.Models;
+using FamilyManagerWeb.Models.ViewModels;
 using FamilyManagerWeb.Models.ViewModels.highchartsModel;
 
 namespace FamilyManagerWeb.Controllers
 {
-    public class ReportController : Controller
+    public class ReportController : LycMVCController
     {
         private FamilyCaiWuDBEntities db = new FamilyCaiWuDBEntities();
 
@@ -91,6 +94,42 @@ namespace FamilyManagerWeb.Controllers
             }
             ViewBag.ResutlData = lbs;
             return View();          
+        }
+
+        /// <summary>
+        /// 查询某一个月份的消费明细
+        /// </summary>
+        /// <param name="iyear">年</param>
+        /// <param name="imonth">月</param>
+        /// <returns></returns>
+        public JsonResult GetMonthApplyOutInfo(int iyear, int imonth) 
+        {
+            System.Threading.Thread.Sleep(500);
+            LycJsonResult lycResult = new LycJsonResult();
+            try
+            {
+                var list = (from a in db.Apply_Main
+                           join b in db.Apply_Sub on a.ID equals b.ApplyMain_BillCode
+                           into left1
+                           from r in left1.DefaultIfEmpty()
+                           where a.iyear == iyear && a.imonth == imonth && r.FeeItemID > 0
+                           select new
+                           {
+                               iyear = a.iyear,
+                               imonth = a.imonth,
+                               iday = a.iday,
+                               feeItemName = r.FeeItemName,
+                               imoney = r.iMoney
+                           }).ToList();
+                lycResult.Data = new JsonResultModel { bSuccess = true, message = "查询成功", jsonObj = list };
+                
+            }
+            catch
+            {
+                lycResult.Data = new JsonResultModel { bSuccess = false, message = "查询失败", jsonObj = null };
+            }
+
+            return lycResult;
         }
         
 
