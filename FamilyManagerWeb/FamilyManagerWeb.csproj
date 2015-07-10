@@ -248,6 +248,7 @@
     </Compile>
     <Compile Include="Models\ViewModels\Apply_temp_sync.cs" />
     <Compile Include="Models\ViewModels\ConfigXml.cs" />
+    <Compile Include="Models\ViewModels\highchartsModel\BaseLineSeriesModel.cs" />
     <Compile Include="Models\ViewModels\SysModelEntity.cs" />
     <Compile Include="Models\ViewModels\UserMenuPower.cs" />
     <Compile Include="Models\ViewModels\UserModelEntity.cs" />
@@ -1937,6 +1938,7 @@
     <Content Include="Views\Report\TestEasyUI.cshtml" />
     <Content Include="Views\Shared\_Layout2.cshtml" />
     <Content Include="Views\Shared\_Layout_report.cshtml" />
+    <Content Include="Views\Report\YearTongQi.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

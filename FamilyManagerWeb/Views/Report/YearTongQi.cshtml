@@ -1,0 +1,72 @@
+﻿@using FamilyManagerWeb.Models.ViewModels.highchartsModel
+
+@{
+    ViewBag.Title = "年度同期对比";
+    Layout = "~/Views/Shared/_Layout_report.cshtml";
+    
+    List<BaseLineSeriesModel> array = ViewBag.ResutlData;
+    
+}
+@section myCSS{
+
+}
+
+@section scripts{
+    <script type="text/javascript">
+        var dataArray = new Array();
+        @foreach (var yearData in array)
+	    {
+            <text>var moneyArray = new Array();</text>
+            foreach (var item in yearData.data)
+            {
+                <text>moneyArray.push(@(item));</text>
+            }
+		    <text>var dataModel = { "name": "@(yearData.name)", "data": moneyArray };</text>
+
+            <text>dataArray.push(dataModel);</text>
+	    }
+        console.log(dataArray);
+        $(function () {
+            $('#container').highcharts({
+                title: {
+                    text: '年度同期支出对比',
+                    x: -20 //center
+                },
+                subtitle: {
+                    text: '',
+                    x: -20
+                },
+                xAxis: {
+                    categories: ['1月', '2月', '3月', '4月', '5月', '6月',
+                        '7月', '8月', '9月', '10月', '11月', '12月']
+                },
+                yAxis: {
+                    title: {
+                        text: '支出 (元)'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    valueSuffix: '元'
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'middle',
+                    borderWidth: 0
+                },
+                series: dataArray
+            });
+        });
+</script>
+}
+
+<div style="width:100%; height:100px;">
+
+</div>
+
+<div id="container" style="width:100%; height:600px;"></div>
