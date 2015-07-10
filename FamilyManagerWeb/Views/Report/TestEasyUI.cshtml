@@ -27,7 +27,13 @@
         $('#container').highcharts({
             chart: { plotBackgroundColor: null, plotBorderWidth: null, plotShadow: false },
             title: { text: '历史记账汇总' },
-            tooltip: { pointFormat: '{series.name}: <b>{point.percentage:.2f}%</b>' },
+            tooltip: {
+                pointFormat: '<h3>{series.name}: {point.percentage:.2f}%</h3>',
+                style: {
+                    fontSize:'14px'
+                },
+                headerFormat: '<span style="font-size: 14px">{point.key}</span><br/>'
+            },
             plotOptions: {
                 pie: {
                     allowPointSelect: true,
@@ -42,7 +48,8 @@
                         }
                     }
                 }
-            }, series: [{
+            },
+            series: [{
                 type: 'pie',
                 name: '占比',
                 data: [
@@ -53,7 +60,14 @@
                     ['@(dt.Rows[count-1]["feeitemname"].ToString())', @(dt.Rows[count-1]["imoney"].ToString())]
 
                     ]
-                }]
+            }],
+            yAxis: {
+                labels: {
+                    style: {
+                        fontSize:'14px'
+                    }
+                }
+            }
         });
     });
     </script>    
