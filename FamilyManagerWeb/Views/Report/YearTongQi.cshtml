@@ -39,7 +39,7 @@
         var dataArray = new Array();
         //单击某一个y轴数据要处理的事件
         var yEvent = {
-            mouseOver:function (e) {
+            click:function (e) {
                 iyear = (this.series.name+"").substr(0,4);
                 imonth = this.index + 1;
                 loadOutInfo(iyear, imonth);
