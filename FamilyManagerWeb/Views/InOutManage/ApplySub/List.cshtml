@@ -12,6 +12,7 @@
 	<div class="panelBar">
 		<ul class="toolBar">
 			<li><a class="delete" href="@Url.Action("DeleteById","ApplySub")/{sid_applySub}" target="ajaxTodo"  rel="ids" title="确定要删除吗?"><span>删除</span></a></li>
+            <li><a class="icon" href="@Url.Action("TKPage", "ApplySub")/{sid_applySub}" ta target="dialog" rel="ids" title="确定要退款吗?"><span>退款</span></a></li>
             <li><a id="editCadd" class="edit" href="@Url.Action("ToUpdateAdd","ApplySub")/{sid_applySub}" target="dialog"  rel="ids"><span>修改备注</span></a></li>
 			<li class="line">line</li>			
 		</ul>

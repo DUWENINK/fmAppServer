@@ -1939,6 +1939,7 @@
     <Content Include="Views\Shared\_Layout2.cshtml" />
     <Content Include="Views\Shared\_Layout_report.cshtml" />
     <Content Include="Views\Report\YearTongQi.cshtml" />
+    <Content Include="Views\InOutManage\ApplySub\ApplySubTK.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1978,7 +1979,7 @@
           <IISUrl>http://localhost:2074/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>True</UseCustomServer>
-          <CustomServerUrl>http://10.0.1.182:5555</CustomServerUrl>
+          <CustomServerUrl>http://localhost:5555</CustomServerUrl>
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
