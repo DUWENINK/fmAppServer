@@ -39,6 +39,8 @@
           <Property Name="BHuanKuan" Type="char" MaxLength="1" />
           <Property Name="CAdd" Type="nvarchar" MaxLength="100" />
           <Property Name="CreateDate" Type="datetime" />
+          <Property Name="CLocation" Type="nvarchar" MaxLength="100" />
+          <Property Name="CSouce" Type="nvarchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="Apply_Sub_CashChange">
           <Key>
@@ -379,6 +381,8 @@
           <Property Name="CreateDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Apply_Main" Relationship="FamilyCaiWuDBModel.FK_Apply_Sub_Apply_Main" FromRole="Apply_Sub" ToRole="Apply_Main" />
           <NavigationProperty Name="Apply_Sub_JieKuan" Relationship="FamilyCaiWuDBModel.FK_Apply_Sub_JieKuan_Apply_Sub" FromRole="Apply_Sub" ToRole="Apply_Sub_JieKuan" />
+          <Property Name="CLocation" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CSouce" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Apply_Sub_CashChange">
           <Key>
@@ -628,6 +632,8 @@
           <EntitySetMapping Name="Apply_Sub">
             <EntityTypeMapping TypeName="FamilyCaiWuDBModel.Apply_Sub">
               <MappingFragment StoreEntitySet="Apply_Sub">
+                <ScalarProperty Name="CSouce" ColumnName="CSouce" />
+                <ScalarProperty Name="CLocation" ColumnName="CLocation" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="ApplyMain_BillCode" ColumnName="ApplyMain_BillCode" />
                 <ScalarProperty Name="CashOrBank" ColumnName="CashOrBank" />

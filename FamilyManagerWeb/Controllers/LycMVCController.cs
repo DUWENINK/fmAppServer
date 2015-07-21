@@ -90,7 +90,9 @@ namespace FamilyManagerWeb.Controllers
                                 new SqlParameter{ParameterName = "@UserID",Value = item.userID},
                                 new SqlParameter{ParameterName = "@BJieKuan",Value = "N"},
                                 new SqlParameter{ParameterName = "@BHuanKuan",Value = "N"},
-                                new SqlParameter{ParameterName = "@CAdd",Value = item.cAdd}
+                                new SqlParameter{ParameterName = "@CAdd",Value = item.cAdd},
+                                new SqlParameter{ParameterName = "@CSouce",Value = APPLY_DATASOURCE_IOSAPP},
+                                new SqlParameter{ParameterName = "@CLocation",Value = item.CLocation ?? ""}
                             };
 
                         //将参数添加到cmd对象中
@@ -122,7 +124,9 @@ namespace FamilyManagerWeb.Controllers
                                 new SqlParameter{ParameterName = "@OutUserBankID",Value = item.outUserBankID},
                                 new SqlParameter{ParameterName = "@BJieKuan",Value = "N"},
                                 new SqlParameter{ParameterName = "@BHuanKuan",Value = "N"},
-                                new SqlParameter{ParameterName = "@CAdd",Value = item.cAdd}
+                                new SqlParameter{ParameterName = "@CAdd",Value = item.cAdd},
+                                new SqlParameter{ParameterName = "@CSouce",Value = APPLY_DATASOURCE_IOSAPP},
+                                new SqlParameter{ParameterName = "@CLocation",Value = item.CLocation ?? ""}
                             };
 
                         //将参数添加到cmd对象中
@@ -150,7 +154,9 @@ namespace FamilyManagerWeb.Controllers
                                 new SqlParameter{ParameterName = "@UserID",Value = item.userID},
                                 new SqlParameter{ParameterName = "@InUserBankID",Value = item.inUserBankID},
                                 new SqlParameter{ParameterName = "@OutUserBankID",Value = item.outUserBankID},
-                                new SqlParameter{ParameterName = "@CAdd",Value = item.cAdd}
+                                new SqlParameter{ParameterName = "@CAdd",Value = item.cAdd},
+                                new SqlParameter{ParameterName = "@CSouce",Value = APPLY_DATASOURCE_IOSAPP},
+                                new SqlParameter{ParameterName = "@CLocation",Value = item.CLocation ?? ""}
                             };
 
                         //将参数添加到cmd对象中

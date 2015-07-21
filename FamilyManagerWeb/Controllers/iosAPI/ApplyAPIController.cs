@@ -42,7 +42,7 @@ namespace FamilyManagerWeb.Controllers
             return Content(sb.ToString());
         }
         //现金记账API
-        public string DoCashAccounting(int userID, string ApplyDate, int FlowTypeID, string feeItemID, string feeItemName, string money, string cAdd)
+        public string DoCashAccounting(int userID, string ApplyDate, int FlowTypeID, string feeItemID, string feeItemName, string money, string cAdd, string location)
         {
             string result = "{}";
             try
@@ -77,7 +77,9 @@ namespace FamilyManagerWeb.Controllers
                                     new SqlParameter{ParameterName = "@UserID",Value = userID},
                                     new SqlParameter{ParameterName = "@BJieKuan",Value = isJieKuan},
                                     new SqlParameter{ParameterName = "@BHuanKuan",Value = "N"},
-                                    new SqlParameter{ParameterName = "@CAdd",Value = cAdd}
+                                    new SqlParameter{ParameterName = "@CAdd",Value = cAdd},
+                                    new SqlParameter{ParameterName = "@CSouce",Value = APPLY_DATASOURCE_IOSAPP},
+                                    new SqlParameter{ParameterName = "@CLocation",Value = location ?? ""}
                                 };
                 //执行存储过程
                 bool success = this.ExecStoredProcedure("proc_AddCashAccouting", sp1);
@@ -100,7 +102,7 @@ namespace FamilyManagerWeb.Controllers
         //银行记账API
         public string DoBankAccounting(int userID, string ApplyDate, int FlowTypeID,
             string feeItemID, string feeItemName, string money,
-            string inUBID, string outUBID, string cAdd)
+            string inUBID, string outUBID, string cAdd, string location)
         {
 
             string result = "{}";
@@ -142,7 +144,9 @@ namespace FamilyManagerWeb.Controllers
                     new SqlParameter{ParameterName = "@OutUserBankID",Value = outUserBankID},
                     new SqlParameter{ParameterName = "@BJieKuan",Value = isJieKuan},
                     new SqlParameter{ParameterName = "@BHuanKuan",Value = "N"},
-                    new SqlParameter{ParameterName = "@CAdd",Value = cAdd}
+                    new SqlParameter{ParameterName = "@CAdd",Value = cAdd},
+                    new SqlParameter{ParameterName = "@CSouce",Value = APPLY_DATASOURCE_IOSAPP},
+                    new SqlParameter{ParameterName = "@CLocation",Value = location ?? ""}
                 };
                 //执行存储过程
                 bool success = this.ExecStoredProcedure("proc_AddBankAccouting", sp2);
@@ -165,7 +169,7 @@ namespace FamilyManagerWeb.Controllers
         //内部转账API
         public string DoZhuanZhang(int userID, string ApplyDate, int FlowTypeID,
             string feeItemID, string feeItemName, string money,
-            string inUBID, string outUBID, string cAdd)
+            string inUBID, string outUBID, string cAdd, string location)
         {
 
             string result = "{}";
@@ -202,7 +206,9 @@ namespace FamilyManagerWeb.Controllers
                     new SqlParameter{ParameterName = "@UserID",Value = userID},
                     new SqlParameter{ParameterName = "@InUserBankID",Value = inUserBankID},
                     new SqlParameter{ParameterName = "@OutUserBankID",Value = outUserBankID},
-                    new SqlParameter{ParameterName = "@CAdd",Value = cAdd}
+                    new SqlParameter{ParameterName = "@CAdd",Value = cAdd},
+                    new SqlParameter{ParameterName = "@CSouce",Value = APPLY_DATASOURCE_IOSAPP},
+                    new SqlParameter{ParameterName = "@CLocation",Value = location ?? ""}
                 };
                 //执行存储过程
                 bool success = this.ExecStoredProcedure("proc_CashChange", sp3);
