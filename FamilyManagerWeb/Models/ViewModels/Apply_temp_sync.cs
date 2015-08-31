@@ -21,5 +21,7 @@ namespace FamilyManagerWeb.Models.ViewModels
         public int inUserBankID { get; set; }
         public int outUserBankID { get; set; }
         public string cAdd { get; set; }
+        public string CSouce { get; set; }
+        public string CLocation { get; set; }
     }
 }

@@ -154,7 +154,7 @@ namespace FamilyManagerWeb.Controllers
                 //获取备注信息
                 string cAdd = Request.Form["cAdd"];
 
-                string sql = "exec proc_AddCashAccouting '" + applyDate + "'," + flowTypeID + ",'" + flowTypeName + "','" + InOutType + "'," + feeItemID + ",'" + feeItemName + "'," + iMoney + "," + loginUser.ID.ToString() + ",'" + isJieKuan + "','N','" + cAdd + "'";
+                string sql = "exec proc_AddCashAccouting '" + applyDate + "'," + flowTypeID + ",'" + flowTypeName + "','" + InOutType + "'," + feeItemID + ",'" + feeItemName + "'," + iMoney + "," + loginUser.ID.ToString() + ",'" + isJieKuan + "','N','" + cAdd + "','PCWeb',''";
                 LycSQLHelper.ExecuteCommand(CommandType.Text, sql);
                 return WebComm.ReturnAlertMessage(ActionReturnStatus.成功, "记账成功！", "", "", CallBackType.none, "");
             }
@@ -213,7 +213,7 @@ namespace FamilyManagerWeb.Controllers
                 //获取备注信息
                 string cAdd = Request.Form["cAdd"];
 
-                string sql = "exec proc_AddBankAccouting '" + applyDate + "'," + flowTypeID + ",'" + flowTypeName + "','" + InOutType + "'," + feeItemID + ",'" + feeItemName + "'," + iMoney + "," + loginUser.ID.ToString() + "," + inUserBankID + "," + outUserBankID + ",'" + isJieKuan + "','N','" + cAdd + "'";
+                string sql = "exec proc_AddBankAccouting '" + applyDate + "'," + flowTypeID + ",'" + flowTypeName + "','" + InOutType + "'," + feeItemID + ",'" + feeItemName + "'," + iMoney + "," + loginUser.ID.ToString() + "," + inUserBankID + "," + outUserBankID + ",'" + isJieKuan + "','N','" + cAdd + "','PCWeb',''";
                 LycSQLHelper.ExecuteCommand(CommandType.Text, sql);
                 return WebComm.ReturnAlertMessage(ActionReturnStatus.成功, "记账成功！", "", "", CallBackType.none, "");
             }
@@ -263,7 +263,7 @@ namespace FamilyManagerWeb.Controllers
                 //获取备注信息
                 string cAdd = Request.Form["cAdd"];
 
-                string sql = "exec proc_CashChange '" + applyDate + "'," + flowTypeID + ",'" + flowTypeName + "','" + InOutType + "'," + iMoney + "," + loginUser.ID.ToString() + "," + inUserBankID + "," + outUserBankID + ",'" + cAdd + "'";
+                string sql = "exec proc_CashChange '" + applyDate + "'," + flowTypeID + ",'" + flowTypeName + "','" + InOutType + "'," + iMoney + "," + loginUser.ID.ToString() + "," + inUserBankID + "," + outUserBankID + ",'" + cAdd + "','PCWeb',''";
                 LycSQLHelper.ExecuteCommand(CommandType.Text, sql);
                 return WebComm.ReturnAlertMessage(ActionReturnStatus.成功, "记账成功！", "", "", CallBackType.none, "");
             }

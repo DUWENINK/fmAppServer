@@ -138,7 +138,7 @@
                 debug: false,	// 调试模式 【true|false】
                 callback: function () {
                     initEnv();
-                    $("#themeList").theme({ themeBase: "/FamilyManage/Content/dwzThemes" }); // 
+                    $("#themeList").theme({ themeBase: "/Content/dwzThemes" }); // 
                 }
             });
 
@@ -257,12 +257,12 @@
                                                     //如果是末级菜单，而且有自定义参数的
                                                     if (subItem2.SysModelUrlPram != null)
                                                     { 
-                                                <li><a href="@Url.Action(subItem2.SysModelAction, subItem2.SysModelController)?@subItem2.SysModelUrlPram " target="@subItem2.SysModelTarget" rel="@subItem2.SysModelRel">@subItem2.SysModelName</a></li>
+                                                <li><a href="@Url.Action(subItem2.SysModelAction, subItem2.SysModelController)?@subItem2.SysModelUrlPram " target="@(subItem2.SysModelTarget!="dialog"?"navTab":"dialog")" rel="@subItem2.SysModelRel">@subItem2.SysModelName</a></li>
                                                     }
                                                     else
                                                     {
                                                         //只是末级菜单，没有自定义参数
-                                                <li><a href="@Url.Action(subItem2.SysModelAction, subItem2.SysModelController)" target="@subItem2.SysModelTarget" rel="@subItem2.SysModelRel">@subItem2.SysModelName</a></li>
+                                                <li><a href="@Url.Action(subItem2.SysModelAction, subItem2.SysModelController)" target="@(subItem2.SysModelTarget!="dialog"?"navTab":"dialog")" rel="@subItem2.SysModelRel" @if (subItem2.SysModelTarget == "iframe") { <text> external="true" </text>  }>@subItem2.SysModelName</a></li>
                                                     }
                                                 }
                                             }
@@ -274,12 +274,12 @@
                                         //如果是末级菜单，而且有自定义参数的
                                         if (subItem.SysModelUrlPram != null)
                                         { 
-                                    <li><a href="@Url.Action(subItem.SysModelAction, subItem.SysModelController)?@subItem.SysModelUrlPram " target="@subItem.SysModelTarget" rel="@subItem.SysModelRel">@subItem.SysModelName</a></li>
+                                    <li><a href="@Url.Action(subItem.SysModelAction, subItem.SysModelController)?@subItem.SysModelUrlPram " target="@(subItem.SysModelTarget!="dialog"?"navTab":"dialog")" rel="@subItem.SysModelRel">@subItem.SysModelName</a></li>
                                         }
                                         else
                                         {
                                             //只是末级菜单，没有自定义参数
-                                    <li><a href="@Url.Action(subItem.SysModelAction, subItem.SysModelController)" target="@subItem.SysModelTarget" rel="@subItem.SysModelRel">@subItem.SysModelName</a></li>
+                                    <li><a href="@Url.Action(subItem.SysModelAction, subItem.SysModelController)" target="@(subItem.SysModelTarget!="dialog"?"navTab":"dialog")" rel="@subItem.SysModelRel" @if (subItem.SysModelTarget == "iframe") { <text> external="true" </text>  }>@subItem.SysModelName</a></li>
                                         }
                                     }
 

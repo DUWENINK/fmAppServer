@@ -34,6 +34,8 @@ namespace FamilyManagerWeb.Models
         public string BHuanKuan { get; set; }
         public string CAdd { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
+        public string CLocation { get; set; }
+        public string CSouce { get; set; }
     
         public virtual Apply_Main Apply_Main { get; set; }
         public virtual ICollection<Apply_Sub_JieKuan> Apply_Sub_JieKuan { get; set; }
