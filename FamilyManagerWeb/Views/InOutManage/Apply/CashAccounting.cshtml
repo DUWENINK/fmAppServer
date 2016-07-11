@@ -1,4 +1,4 @@
-﻿@model FamilyManagerWeb.Models.Apply_Sub
+@model FamilyManagerWeb.Models.Apply_Sub
 
 
 @{
@@ -27,6 +27,12 @@
 				<dd>
                     <input type="text" name="ApplyDate" class="date textInput readonly focus required" datefmt="yyyy-MM-dd" />	
 				</dd>
+			</dl>
+            <dl>
+				<dt>金额：</dt>
+				<dd>
+                    <input type="text" alt="请输入数字" id="NowMoney" name="NowMoney" maxlength="26" class="required number" /> 
+				</dd>
 			</dl>         
 			<dl>
 				<dt>资金流动类型：</dt>
@@ -47,14 +53,7 @@
                     <input id="FeeItemName" name="search_Fee.FeeItemName" value="" type="text" lookupgroup="search_Fee" />
                     <a class="btnLook" href="@Url.Action("ShowFeeItemList", "Dialog")" lookupGroup="search_Fee">查找带回</a>
                 </dd>
-
-            </dl>
-            <dl>
-				<dt>金额：</dt>
-				<dd>
-                    <input type="text" alt="请输入数字" id="NowMoney" name="NowMoney" maxlength="26" class="required number" /> 
-				</dd>
-			</dl>
+            </dl>            
             <dl>
 				<dt>备注信息：</dt>
 				<dd>
