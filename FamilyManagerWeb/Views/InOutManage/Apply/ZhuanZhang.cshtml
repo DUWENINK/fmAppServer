@@ -1,4 +1,4 @@
-﻿@model FamilyManagerWeb.Models.Apply_Sub
+@model FamilyManagerWeb.Models.Apply_Sub
 @{Layout = null;}
 
 <script type="text/javascript">
@@ -36,6 +36,12 @@
                 </dd>
             </dl>
             <dl>
+                <dt>金额：</dt>
+                <dd>
+                    <input type="text" alt="请输入数字" id="NowMoney" name="NowMoney" maxlength="26" class="required number" /> 
+                </dd>
+            </dl>
+            <dl>
                 <dt>资金流动类型：</dt>
                 <dd>
                     <select class="combox" name="FlowTypeID" onchange="lalasscc(this)">
@@ -46,13 +52,7 @@
                         }
                     </select>
                 </dd>
-            </dl>
-            <dl>
-                <dt>金额：</dt>
-                <dd>
-                    <input type="text" alt="请输入数字" id="NowMoney" name="NowMoney" maxlength="26" class="required number" /> 
-                </dd>
-            </dl>
+            </dl>            
             <dl id="inUserBank" style="display: none;">
                 <dt>入账银行：</dt>
                 <dd>
@@ -74,7 +74,6 @@
                         </tr>
                     </table>
                 </dd>
-
             </dl>
             <dl id="outUserBank" style="display: none;">
                 <dt>出账银行：</dt>
